@@ -1,0 +1,77 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}   % para tildes
+\usepackage[spanish]{babel}   % español
+\usepackage{color}            % colores para código
+\usepackage{xcolor}           % colores en general
+\definecolor{blueShyupss}{RGB}{0,0,128}
+\usepackage[colorlinks=true, linkcolor=blueShyupss, urlcolor=gray, citecolor=orange]{hyperref} % para links (están con colores personalizados)
+\usepackage{amsmath, amssymb} % símbolos y matemáticas
+\usepackage{graphicx}         % imágenes
+\usepackage{listings}         % código fuente
+\usepackage{fancyhdr}         % encabezado/pie de página
+\usepackage{geometry}         % márgenes
+
+% definiciones para las llamadas a definiciones y teoremas
+\newtheorem{teorema}{Teorema}
+\newtheorem{definicion}{Definición}
+
+% definicion para los "supertitulos"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+\newcommand{\superTitle}[1]{
+  \clearpage
+  \begin{center}
+    \section*{\underline{\Huge #1}}
+  \end{center}
+  \addcontentsline{toc}{section}{#1}
+}
+
+% definicion para los "enunciados"
+\newcommand{\enunciado}[1]{
+  \vspace{1em} % Añade un pequeño espacio antes
+  \noindent \textbf{\large #1} % Usamos \Large para el tamaño
+  \vspace{1em} % Añade un pequeño espacio después
+  \par
+}
+
+% definicion para los desarrollos
+\newcommand{\desarrollo}[1]{
+  \vspace{1em} % Añade un pequeño espacio antes
+  \noindent \text{\large \sloppy \parbox{\textwidth}{#1}} % Ajusta el texto automáticamente con salto de línea
+  \vspace{1em} % Añade un pequeño espacio después
+}
+
+\geometry{margin=2cm}
+
+% inicio del documento
+\begin{document}
+
+\title{Teoría de Automatas}
+\author{Diego Soto - Universidad Austral De Chile}
+\date{\today}
+\maketitle
+
+\newpage %índice automático en nueva página
+\tableofcontents
+\newpage
+
+% aquí comienza el contenido del shyupss, ordenado por secciones
+\superTitle{Introducción}
+
+%\superTitle{Análizis de Álgoritmo}
+%\superTitle{Análizis Asintótico}
+%\superTitle{Cotas Inferiores}
+%\superTitle{Recurrencias}
+%\superTitle{Teorema Maestro}
+%\superTitle{Divide y Vencerás}
+\superTitle{Entropia}
+
+%\superTitle{Ayudantía 1}
+%\superTitle{Ayudantía 2}
+\superTitle{Ayudantía 3}
+
+\enunciado{1.- Determine si $2^{n}$ es $\Omega$ o $\Theta$ de $8^{\frac{n}{4}}n^3$}
+\desarrollo{Partimos definiendo que $f(x) = 2^n$ y $g(x) = 8^{\frac{n}{4}}n^3$ \\}
+\desarrollo{Entonces, usaremos $\lim_{x\to\infty}\frac{f(x)}{g(x)}$ para determinar si $f(x)$ es alguna de las condiciones a determinar.}
+\enunciado{2.- Determine si $\sum_{i = 1}^{n}i^3$ es $\Omega$, $\Theta$ o $\Omega$ de $n\log^3(n)$}
+\enunciado{3.- Resolver la recurrencia denotada por: $T(n) = 2T(\frac{n}{2})+3n+2$}
+
+\end{document}
