@@ -10,26 +10,20 @@
 \usepackage{listings}         % código fuente
 \usepackage{fancyhdr}         % encabezado/pie de página
 \usepackage{geometry}         % márgenes
+\usepackage{parskip}          % para los saltos
 
 % definiciones para las llamadas a definiciones y teoremas
 \newtheorem{teorema}{Teorema}
 \newtheorem{definicion}{Definición}
 
-% definicion para los "supertitulos"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-\newcommand{\superTitle}[1]{
-  \clearpage
-  \begin{center}
-    \section*{\underline{\Huge #1}}
-  \end{center}
-  \addcontentsline{toc}{section}{#1}
-}
+% Para el texto de "Ejemplo:"
+\newcommand{\ejemplo}{\vspace{1.1em}\textbf{\vspace{0.2em}\textit{Ejemplo:}} } 
 
 % definicion para los "enunciados"
 \newcommand{\enunciado}[1]{
   \vspace{1em} % Añade un pequeño espacio antes
   \noindent \textbf{\large #1} % Usamos \Large para el tamaño
   \vspace{1em} % Añade un pequeño espacio después
-  \par
 }
 
 % definicion para los desarrollos
@@ -54,24 +48,107 @@
 \newpage
 
 % aquí comienza el contenido del shyupss, ordenado por secciones
-\superTitle{Introducción}
+\section{Introducción}
 
-%\superTitle{Análizis de Álgoritmo}
-%\superTitle{Análizis Asintótico}
-%\superTitle{Cotas Inferiores}
-%\superTitle{Recurrencias}
-%\superTitle{Teorema Maestro}
-%\superTitle{Divide y Vencerás}
-\superTitle{Entropia}
+La teoría de autómatas constituye uno de los pilares fundamentales de la computación teórica y el análisis formal de lenguajes. Esta disciplina permite modelar y analizar el comportamiento de sistemas computacionales mediante representaciones abstractas conocidas como autómatas. A través del estudio de estos modelos, es posible comprender mejor cómo funcionan los lenguajes formales, los compiladores, y las máquinas que los procesan. 
 
-%\superTitle{Ayudantía 1}
-%\superTitle{Ayudantía 2}
-\superTitle{Ayudantía 3}
+Para comenzar, definiremos y repasaremos algunos conceptos que son previamente sabidos del ramo Estructuras Discretas y luego de a poco, nos iremos adentrando en materia.
 
-\enunciado{1.- Determine si $2^{n}$ es $\Omega$ o $\Theta$ de $8^{\frac{n}{4}}n^3$}
-\desarrollo{Partimos definiendo que $f(x) = 2^n$ y $g(x) = 8^{\frac{n}{4}}n^3$ \\}
-\desarrollo{Entonces, usaremos $\lim_{x\to\infty}\frac{f(x)}{g(x)}$ para determinar si $f(x)$ es alguna de las condiciones a determinar.}
-\enunciado{2.- Determine si $\sum_{i = 1}^{n}i^3$ es $\Omega$, $\Theta$ o $\Omega$ de $n\log^3(n)$}
-\enunciado{3.- Resolver la recurrencia denotada por: $T(n) = 2T(\frac{n}{2})+3n+2$}
+\section{Alfabetos y Lenguajes}
+
+Cuando hablamos comunmente de un lenguaje, se nos puede venir a la distintas ideas, como palabras, letras, etcétera. 
+Comenzaremos dando algunas definiciones de estas, para poder empezar a contruir otras fokin definiciones.
+
+\begin{definicion}
+  Un Alfabeto es un conjunto finito de símbolos. \begin{center} $\Sigma = \{a, b, c, ..., z\}$\end{center}
+\end{definicion}
+
+\begin{definicion}
+  Una Palabra es una secuencia ordenada de símbolos de un alfabeto. \par \begin{center} $x = a_1a_2a_3...a_4$ \end{center}
+\end{definicion}
+
+\begin{definicion}
+  El largo de una palabra es el número de símbolos que los conforman. \par \begin{center}$\left\lvert x \right\rvert  = n$\end{center}
+\end{definicion}
+
+\begin{definicion}
+  La palabra vacía es una palabra que no tiene ningún símbolo.
+  \begin{center}
+    Palabra vacía: $\varepsilon \Rightarrow \left\lvert \varepsilon \right\rvert = 0$
+  \end{center}
+\end{definicion}
+
+\begin{definicion}
+  Si $\Sigma$ es un alfabeto, anotaremos como $\Sigma^*$ el conjunto de todas las palabras posibles sobre $\Sigma$.
+  \begin{center}
+    $\Sigma^* = \bigcup_{k\geq0} \Sigma^k = \Sigma^0 \cup \Sigma^1 \cup \Sigma^2 \cup ...$
+
+    En donde $\Sigma^k$ es el conjunto de palabras de largo k.
+  \end{center}
+\end{definicion}
+
+\begin{ejemplo}
+  \begin{center}
+    Si $\Sigma = \left\{a, b\right\} $, entonces: 
+  
+    $\Sigma^0 = \left\{\epsilon\right\}$
+  
+    $\Sigma^1 = \left\{a, b\right\}$
+  
+    $\Sigma^2 = \left\{aa, ab, ba, bb\right\}$
+  
+    \dots
+    
+    $\Sigma^n = \left\{\epsilon, a, b, aa, ab, ba, bb, aaa, \dots\right\}$
+  \end{center}
+\end{ejemplo}
+
+\begin{definicion}
+  Un lenguaje es un conjunto de palabras que se pueden armar sobre un alfabeto $\Sigma$, el cual denotaremos por la letra $L$
+
+  \begin{center}
+    Con esto, tenemos que $L\subseteq \Sigma^*$
+  \end{center}
+\end{definicion}
+
+\begin{ejemplo}
+  \begin{itemize}
+    \item $L = \{ x \in \{a, b\}^* \mid \text{x comienza con 'a'} \}$
+
+    $L = \{a, aa, ab, aab, aba, \dots\}$
+    \item $L = \{ x \in \{0, 1\}^* \mid \text{x es palindromo'} \}$
+    
+    $L = \{0, 1, 00, 11, 101, 010, 11011, 0110, \dots\}$
+    \item $L = \{ x \in 6^+ \mid \text{Los dígitos de x suman 10}\}$
+    
+    $L = \{64, 22222, 235, \dots\} \text{ (Notar que las palabras acá son finitas)}$
+  \end{itemize}
+\end{ejemplo}
+
+\vspace{1em}
+Entonces, podemos decir que existen lenguajes que pueden ser finitos, o infinitos, donde los lenguajes infinitos son aquellos que son compuestos por infinitas palabras que pertenecen al lenguaje, mientras que en los finitos no.
+\vspace{2em}
+
+\hspace{1em}
+En $\Sigma^*$ se definen las siguientes operaciones:
+\begin{itemize}
+  \item Concatenacion:
+  \begin{center}
+    Sean $x = a_1a_2 \dots a_n$, $y = b_1b_2 \dots b_n$, entonces:
+
+    $x\cdot y = xy = a_1a_2 \dots a_nb_1b_2 \dots b_n$
+  \end{center}
+  \item Reflexión:
+  \begin{center}
+    Si $x = a_1a_2 \dots a_n$, entonces:
+
+    $x^r  = a_n\dots a_2a_1$
+
+    $x^r$ se denomina "Palabra Refleja"
+  \end{center}
+\end{itemize}
+
+\section{Operaciones Con Lenguajes}
+
 
 \end{document}
