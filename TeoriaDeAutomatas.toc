@@ -2,3 +2,5 @@
 \contentsline {section}{\numberline {1}Introducción}{3}{section.1}%
 \contentsline {section}{\numberline {2}Alfabetos y Lenguajes}{3}{section.2}%
 \contentsline {section}{\numberline {3}Operaciones Con Lenguajes}{4}{section.3}%
+\contentsline {section}{\numberline {4}Recursividad Izquierda no inmediata}{5}{section.4}%
+\contentsline {section}{\numberline {5}Forma normal de Greibach}{6}{section.5}%

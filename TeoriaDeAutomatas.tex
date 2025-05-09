@@ -11,27 +11,18 @@
 \usepackage{fancyhdr}         % encabezado/pie de página
 \usepackage{geometry}         % márgenes
 \usepackage{parskip}          % para los saltos
+\usepackage{tikz}             % para automatas
+\usetikzlibrary{automata, positioning} % uso específico de automatas
 
-% definiciones para las llamadas a definiciones y teoremas
+% definiciones para las llamadas a definiciones y teoremas"
 \newtheorem{teorema}{Teorema}
 \newtheorem{definicion}{Definición}
+\newtheorem{lema}{Lema}
+\newtheorem{demostracion}{Dem. }
 
 % Para el texto de "Ejemplo:"
 \newcommand{\ejemplo}{\vspace{1.1em}\textbf{\vspace{0.2em}\textit{Ejemplo:}} } 
-
-% definicion para los "enunciados"
-\newcommand{\enunciado}[1]{
-  \vspace{1em} % Añade un pequeño espacio antes
-  \noindent \textbf{\large #1} % Usamos \Large para el tamaño
-  \vspace{1em} % Añade un pequeño espacio después
-}
-
-% definicion para los desarrollos
-\newcommand{\desarrollo}[1]{
-  \vspace{1em} % Añade un pequeño espacio antes
-  \noindent \text{\large \sloppy \parbox{\textwidth}{#1}} % Ajusta el texto automáticamente con salto de línea
-  \vspace{1em} % Añade un pequeño espacio después
-}
+\newcommand{\ejercicio}{\vspace{1.1em}\textbf{\vspace{0.2em}\textit{Ejercicio:}} } 
 
 \geometry{margin=2cm}
 
@@ -91,7 +82,7 @@ Comenzaremos dando algunas definiciones de estas, para poder empezar a contruir 
   \begin{center}
     Si $\Sigma = \left\{a, b\right\} $, entonces: 
   
-    $\Sigma^0 = \left\{\epsilon\right\}$
+    $\Sigma^0 = \left\{\varepsilon\right\}$
   
     $\Sigma^1 = \left\{a, b\right\}$
   
@@ -150,5 +141,167 @@ En $\Sigma^*$ se definen las siguientes operaciones:
 
 \section{Operaciones Con Lenguajes}
 
+\newpage
+\section{Recursividad Izquierda no inmediata}
+
+Por el proceso anterior se elimina toda recursividad izquierda inmediata, no así la recursividad obtenida con derivaciones de mas de un paso. Por ejemplo en la gramática
+
+\begin{center}
+  $S \rightarrow Aa \mid b$
+
+  $A \rightarrow Ac \mid Sd \mid e$
+\end{center}
+
+Tenemos $S \Rightarrow Aa \Rightarrow Sda$
+
+\begin{center}
+  $S \Rightarrow^* Sda$
+\end{center}
+
+\begin{lema}
+  Toda L.L.C que no contiene $\varepsilon$ puede ser generado por una G.L.X sim recursividad izquierda.
+\end{lema}
+
+\begin{demostracion}
+  Sea $G = (V, T, P, S)$ una G.L.C que genera L.
+
+  \begin{enumerate}
+    \item Elimina los ciclos con el procedimiento visto para verificar una gramática.
+    \item Ordenar las variables $V = \{A_1, A_2, \dots, A_n \}$ de tal forma que $A_i \rightarrow A_j\alpha$ es una producción solo si $i < j$.
+    
+    Si $A_k \rightarrow A_j\alpha$ con $j < k$, con el procedimiento de sustitución se reemplaza en $A_k \rightarrow A_j\alpha$ por las $A_j-producciones$. Se repite este proceso.
+    \item Eliminar recursividad izquierda inmediata.
+  \end{enumerate}
+
+  Se repite 1, 2 y 3 hasta que no quede recursividad izquierda.
+\end{demostracion}
+
+\begin{ejemplo}
+
+  \begin{center}
+    $S \rightarrow Aa \mid b$
+  
+    $A \rightarrow Ac \mid Sd \mid e$
+    
+  \end{center}
+  \begin{enumerate}
+    \item No hay ciclos
+    \item $V = \{S, A\}$, $S < A$ y $A \rightarrow Sd$ con $S < A$
+
+    Se reemplaza por las $S-producciones$
+
+    $S \rightarrow Aa \mid b$
+
+    $A \rightarrow Ac \mid Aad \mid bd \mid e$
+
+    \item $S \rightarrow Aa \mid b$
+    
+    $A \rightarrow bdA' \mid bd \mid eA' \mid e$
+
+    $A' \rightarrow cA' \mid c \mid adA' \mid ad$
+
+    $V = {S, A, A'}$
+  \end{enumerate}
+
+\end{ejemplo}
+
+\begin{ejercicio}
+  Elimina la recursividad izquierda.
+
+  $S \rightarrow aRb \mid Rb$
+
+  $R \rightarrow ca \mid Taa$
+
+  $T \rightarrow Ra$
+
+  \begin{enumerate}
+    \item No hay ciclos
+    \item $V = {S, R, T}$
+    
+    $S \rightarrow aRb \mid Rb$
+
+    $R \rightarrow ca \mid Taa$
+
+    $T \rightarrow caa \mid Taaa$
+
+    \item $S \rightarrow aRb \mid Rb$
+    
+    $R \rightarrow ca \mid Taa$
+
+    $T \rightarrow caaT' \mid caa$
+
+    $T' \rightarrow aaaT' \mid aaa$
+
+    $V = {S, R, T, T'}$, $T \rightarrow cRST$
+  \end{enumerate}
+
+\end{ejercicio}
+
+\section{Forma normal de Greibach}
+
+Una G.L.C $G = (V, T, P, S)$ se dice qie está en Forma Normal de greibach (F.N.G) si sus producciones toenen la misma forma:
+
+\begin{center}
+    $A \rightarrow a\alpha$ con $A \in V$, $a \in T$, $\alpha \in V^*$
+\end{center}
+
+\begin{teorema}
+  Toda L.L.C que no contiene $\varepsilon$ puede ser generado por una G.L.C. en su F.N.G.
+\end{teorema}
+
+\begin{demostracion}
+  El algoritmo para trnasformar una G.L.C a F.N.G es:
+
+  \begin{enumerate}
+    \item Ramifica la gramática y eliminar toda recursividad izquierda.
+    \item Para cada producción de la forma $A \rightarrow \alpha_1\alpha_2\dots\alpha_k$ con $k\geq2$, si $\alpha_i$, $i\geq2$ es un terminal, se reemplaza por una variable auxiliar $X_{\alpha_i}$ y se agrega la producción $X_{\alpha_i}\rightarrow\alpha_i$
+    \item Se ordenan las variables $V = {A_1, A_2, \dots, A_m}$ de modo que necesariamente $A_m \rightarrow a\beta$ con $a \in T$. Por el procedimiento de sustitución, se puede sustituir en las producciones $A_i \rightarrow A_j\beta$ con $i<j$ por las $A_j - producciones$, de modo que hacer aparecer un terminal al comienzo del lado derecho, partiendo de $j = m$ hacia atrás.
+  \end{enumerate}
+\end{demostracion}
+
+\begin{ejemplo}
+
+  \begin{center}
+    $S \rightarrow abA \mid Sa$
+  
+    $A \rightarrow Bb \mid cc$
+  
+    $B \rightarrow ac \mid ba$
+  \end{center}
+  
+  \begin{enumerate}
+    \item Es positiva
+    \item Está ramificada
+
+    $V = {S, A, B}$ (no hay "Recursividad izquierda no inmediata")
+    
+    Eliminamos "Recursividad izquierda inmediata"
+
+    $S \rightarrow abA \mid Sa$
+
+    $S' \rightarrow aS' \mid a$
+
+    $A \rightarrow Bb \mid cc$
+
+    $B \rightarrow ac \mid ba$
+
+    \item $S \rightarrow aX_bAS' \mid aX_bA$
+    
+    $S' \rightarrow aS' \mid a$
+
+    $A \rightarrow BX_b \mid cX_c$
+
+    $B \rightarrow aX_c \mid bX_a$
+
+    $X_a \rightarrow a$
+
+    $X_b \rightarrow b$
+
+    $X_c \rightarrow c$
+
+    \item $A \rightarrow aX_cX_b \mid bX_aX_b \mid cX_c$
+  \end{enumerate}
+
+\end{ejemplo}
 
 \end{document}
